@@ -4,8 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   BaseEntity,
-  Double,
+  ManyToOne,
 } from "typeorm";
+import { Accounts } from "./Accounts";
 
 @Entity()
 export class Transactions extends BaseEntity {
@@ -13,11 +14,14 @@ export class Transactions extends BaseEntity {
   id: number;
 
   @Column()
-  value: Double;
+  value: number;
 
   @CreateDateColumn()
   createdAt: Date;
   
-//   @OneToMany(()=>Accounts, (accounts) => accounts.id)
-//   accounts: Accounts[]
+  @ManyToOne(type => Accounts, transactions => Transactions)
+  debitedAccount: Accounts
+
+  @ManyToOne(type => Accounts, transactions => Transactions)
+  creditedAccount: Accounts
 }

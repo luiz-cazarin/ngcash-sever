@@ -3,10 +3,11 @@ import {
   Column,
   PrimaryGeneratedColumn,
   BaseEntity,
-  Double,
   OneToMany,
+  OneToOne,
 } from "typeorm";
 import { Transactions } from "./Transactions";
+import { Users } from "./Users";
 
 @Entity()
 export class Accounts extends BaseEntity {
@@ -14,8 +15,11 @@ export class Accounts extends BaseEntity {
   id: number;
 
   @Column()
-  balance: Double;
+  balance: number;
 
-  @OneToMany(() => Transactions, (transactions) => transactions)
+  @OneToOne( type => Users, accounts => Accounts)
+  users: Users;
+
+  @OneToMany(type => Transactions, accounts => Accounts)
   transactions: Transactions[];
 }

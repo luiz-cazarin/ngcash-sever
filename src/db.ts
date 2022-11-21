@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm";
-import { User } from "./entity/User";
+import { Users } from "./entity/Users";
+import { Accounts } from "./entity/Accounts";
+import { Transactions } from "./entity/Transactions";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
@@ -10,5 +12,5 @@ export const AppDataSource = new DataSource({
   database: "ngcash",
   synchronize: true,
   // logging: true,
-  entities: [User],
+  entities: [Users, Accounts, Transactions],
 });

@@ -3,10 +3,13 @@ import {
   Column,
   PrimaryGeneratedColumn,
   BaseEntity,
+  OneToOne,
+  JoinColumn,
 } from "typeorm";
+import { Accounts } from "./Accounts";
 
 @Entity()
-export class User extends BaseEntity {
+export class Users extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -16,4 +19,7 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
+  @OneToOne(type => Accounts, users => Users)
+  @JoinColumn()
+  accounts: Accounts
 }
