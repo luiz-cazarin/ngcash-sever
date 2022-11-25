@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { Accounts } from "../entity/Accounts";
 import { Users } from "../entity/Users";
 
 interface UserBody {
@@ -33,17 +34,19 @@ export const getUser = async (req: Request, res: Response) => {
   }
 };
 
-export const createUser = async (
-  req: Request<UserBody>,
-  res: Response
-) => {
-  const { id, username, password } = req.body;
+export const createUser = async (req: Request<UserBody>, res: Response) => {
+  const { username, password, accountsId } = req.body;
   const user = new Users();
-  user.id = id;
   user.username = username;
   user.password = password;
-  console.log(user);
-  const validateUser = await Users.findOneBy({ username: username});
+
+  const validateUser = await Users.findOneBy({ username: username });
+  if (user.username.length < 3) {
+    return res.status(404).json({ message: "The username is invalid" });
+  }
+  if (user.password.length < 3) {
+    return res.status(404).json({ message: "The password is invalid" });
+  }
   if (validateUser) {
     return res.status(404).json({ message: "The user already exists" });
   } else {

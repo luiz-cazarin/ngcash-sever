@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
-import { Double } from "typeorm";
+import { Accounts } from "../entity/Accounts";
 import { Transactions } from "../entity/Transactions";
 
 interface TransactionsBody {
-  value: Double;
+  value: number;
+  debitedAccount: Accounts;
+  creditedAccount: Accounts;
 }
 
 export const getTransactions = async (req: Request, res: Response) => {
@@ -33,11 +35,17 @@ export const getTransaction = async (req: Request, res: Response) => {
 };
 
 export const newTransaction = async (
-  req: Request<unknown, unknown, TransactionsBody>,
+  req: Request<TransactionsBody>,
   res: Response
 ) => {
-  return res.json({ res: req.body});
-};
+  const { value, debitedAccount, creditedAccount } = req.params;
+  const transaction = new Transactions();
+  transaction.value = value;
+  transaction.debitedAccount = debitedAccount;
+  transaction.creditedAccount = creditedAccount;
+  await transaction.save();
+  return res.json(transaction);
+}
 
 export const updateTransaction = async (req: Request, res: Response) => {
   const { id } = req.params;
